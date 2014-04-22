@@ -11,4 +11,4 @@ Solutions List
 | Problem Name  | Solution Runtime Estimate   |
 |:--------------|:---------------------------:|
 | Two Sum |  O(n^2) |
-| Median of Two Sorted Arrays| O(n) |
+| Median of Two Sorted Arrays| O(n log(n) ) |
