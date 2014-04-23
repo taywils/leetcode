@@ -8,8 +8,8 @@
  */
 class Solution {
 public:
-    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
-        ListNode* aList = new ListNode(0);
+	ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+		ListNode* aList = new ListNode(0);
 		ListNode* aw = aList;
 		ListNode* w1 = l1;
 		ListNode* w2 = l2;
@@ -62,5 +62,5 @@ public:
 		}
 		
 		return aList;    
-    }
+	}
 };
