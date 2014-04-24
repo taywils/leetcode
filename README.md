@@ -14,3 +14,4 @@ Solutions List
 | [Median of Two Sorted Arrays](https://github.com/taywils/leetcode/blob/master/MedianOfTwoSortedArrays.cpp)| O(nlog(n)) |
 | [LongestSubstringWithoutRepeatingCharacters](https://github.com/taywils/leetcode/blob/master/LongestSubstringWithoutRepeatingCharacters.cpp) | O(n) |
 | [AddTwoNumbers](https://github.com/taywils/leetcode/blob/master/AddTwoNumbers.cpp) | O(n) |
+| [ZigZagConversion](http://github.com/taywils/leetcode/blob/master/ZigZagConversion.cpp) | O(n^2) |
