@@ -3,7 +3,7 @@ LeetCode Online Judge Solutions
 - Attempt the problem before looking at the solutions listed
 - Don't just copy and paste my solutions; you won't learn anything that way
 - Please compare these solutions to your own
-- I really need to improve my C++ skills and this together with OpenGL coding should do that
+- I really need to improve my C++ skills and in conjunction with other projects should help
 
 Solutions List
 ==============
