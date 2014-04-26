@@ -15,3 +15,4 @@ Solutions List
 | [LongestSubstringWithoutRepeatingCharacters](https://github.com/taywils/leetcode/blob/master/LongestSubstringWithoutRepeatingCharacters.cpp) | O(n) |
 | [AddTwoNumbers](https://github.com/taywils/leetcode/blob/master/AddTwoNumbers.cpp) | O(n) |
 | [ZigZagConversion](http://github.com/taywils/leetcode/blob/master/ZigZagConversion.cpp) | O(n^2) |
+| [ReverseInteger](http://github.com/taywils/leetcode/blob/master/ReverseInteger.cpp) | O(n) |

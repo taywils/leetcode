@@ -68,6 +68,7 @@ public:
 	}
 };
 
+/*
 int main()
 {
 	Solution s;
@@ -76,3 +77,4 @@ int main()
 	assert("ABC" == s.convert("ABC", 1));
 	return 0;
 }
+*/
