@@ -3,72 +3,21 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
+#include <cctype>
 #include <random>
 #include <climits>
 
 using namespace std;
-
-int myAtoi(string str) {
-    int myInt = 0;
-    int myDigit = 0;
-
-    for(int i = str.length() - 1; i > -1; --i) {
-        switch(str.at(i)) {
-            case '0':
-                myInt += (myDigit == 0) ? 0 : (int)(pow(10, (double)myDigit) * 0);
-            break;
-
-            case '1': {
-                myInt += (myDigit == 0) ? 1 : (int)(pow(10, (double)myDigit) * 1);
-            } break;
-
-            case '2': {
-                myInt += (myDigit == 0) ? 2 : (int)(pow(10, (double)myDigit) * 2);
-            } break;
-
-			case '3':{
-						 myInt += (myDigit == 0) ? 3 : (int)(pow(10, (double)myDigit) * 3);
-			} break;
-
-			case '4':{
-						 myInt += (myDigit == 0) ? 4 : (int)(pow(10, (double)myDigit) * 4);
-			} break;
-
-			case '5':{
-						 myInt += (myDigit == 0) ? 5 : (int)(pow(10, (double)myDigit) * 5);
-			} break;
-
-			case '6':{
-						 myInt += (myDigit == 0) ? 6 : (int)(pow(10, (double)myDigit) * 6);
-			} break;
-
-			case '7':{
-						 myInt += (myDigit == 0) ? 7 : (int)(pow(10, (double)myDigit) * 7);
-			} break;
-
-			case '8':{
-						 myInt += (myDigit == 0) ? 8 : (int)(pow(10, (double)myDigit) * 8);
-			} break;
-
-			case '9':{
-						 myInt += (myDigit == 0) ? 9 : (int)(pow(10, (double)myDigit) * 9);
-			} break;
-
-			case '-':{
-						 myInt *= -1;
-			} break;
-        }
-       ++myDigit; 
-    }
-
-    return myInt;
-}
 
 class Solution {
 public:
 	int atoi(const char *str) {
 		int myInt = 0;
 		int myDigit = 0;
+		string intMaxStr = to_string(INT_MAX);
+		string intMinStr = to_string(INT_MIN);
+
+		str = this->prepareStr(str);
 
 		for (int i = strlen(str) - 1; i >= 0; --i) {
 			if ('-' == str[i]) {
@@ -111,10 +60,45 @@ private:
 		}
 	}
 
-	const char* cSubStr(const char* cStr, int beginPos, int subStrSize) {
-		//http://stackoverflow.com/questions/4214314/get-a-substring-of-a-char
-		char* trimedStr = new char[subStrSize]();
-		return{ "" };
+	const char* prepareStr(const char* cStr) {
+		string cppStr(cStr);
+		if(cppStr.length() == 0) {
+			return { "" };
+		}
+		int idx = 0;
+		// Remove leading whitespace
+		for(auto s : cppStr) {
+			if(' ' == s) {
+				++idx;
+			} else {
+				break;
+			}
+		}
+		cppStr = cppStr.substr(idx);
+		idx = 0;
+		// Remove trailing whitespace
+		for(auto s : cppStr) {
+			if(' ' == s) {
+				break;
+			} else {
+				++idx;
+			}
+		}
+		if(idx > 0) {
+			cppStr = cppStr.substr(0, idx);
+		}
+		// Truncate if char isalpha
+		idx = 0;
+		for(auto s : cppStr) {
+			if(isalpha(s) && s != '-') {
+				break;
+			} else {
+				++idx;
+			}
+		}
+		cppStr = cppStr.substr(0, idx);
+
+		return cppStr.c_str();
 	}
 };
 
@@ -124,7 +108,7 @@ void testValidInts() {
 	std::uniform_int_distribution<int> dist{ INT_MIN, INT_MAX };
 
 	Solution solution;
-	const int trials = 1000;
+	const int trials = 0;
 
 	for (int i = 0; i < trials; ++i) {
 		int randNum = dist(mt);
@@ -132,6 +116,11 @@ void testValidInts() {
 		const char* randNumCStr = randNumStr.c_str();
 		assert(atoi(randNumCStr) == solution.atoi(randNumCStr));
 	}
+
+	string largerThanMax{"2147483648"};
+	string smallerThanMin{"-2147483648"};
+	assert(INT_MAX == solution.atoi(largerThanMax.c_str()));
+	assert(INT_MIN == solution.atoi(smallerThanMin.c_str()));
 }
 
 void testWackyStringInput() {
@@ -144,35 +133,24 @@ void testWackyStringInput() {
 	const char* excessFront{ " 1 2 34 56789" };
 	const char* emptyString{ "" };
 	const char* whitespace{ " " };
-	const char* nonInt{ "a123" };
+	const char* nonIntChar{ "  -0012a42" };
+	const char* startNonInt{ "x 123 " };
+	const char* a{ "a" };
 
-	cout << atoi(leadingWhiteSpace) << endl;
-	cout << atoi(trailingWhiteSpace) << endl;
-	cout << atoi(gaps) << endl;
-	cout << atoi(excessBehind) << endl;
-	cout << atoi(excessFront) << endl;
-	cout << atoi(emptyString) << endl;
-	cout << atoi(whitespace) << endl;
-	cout << atoi(nonInt) << endl;
-	//cout << s.atoi(a) << endl;
-	//assert(atoi(a) == s.atoi(a));
+	assert(atoi(leadingWhiteSpace) == s.atoi(leadingWhiteSpace));
+	assert(atoi(trailingWhiteSpace) == s.atoi(trailingWhiteSpace));
+	assert(atoi(gaps) == s.atoi(gaps));
+	assert(atoi(excessBehind) == s.atoi(excessBehind));
+	assert(atoi(excessFront) == s.atoi(excessFront));
+	assert(atoi(emptyString) == s.atoi(emptyString));
+	assert(atoi(whitespace) == s.atoi(whitespace));
+	assert(atoi(nonIntChar) == s.atoi(nonIntChar));
+	assert(atoi(startNonInt) == s.atoi(startNonInt));
+	assert(atoi(a) == s.atoi(a));
 }
 
 int main(void) {
 	testValidInts();
-	testWackyStringInput();
-	// style A
-	const int seven = 7;
-	char foo[seven] = { '\0' };
-	strncpy(foo, "bar", 3);
-	strncat(foo, "foo", 3);
-	cout << foo << endl;
-	// style B
-	int sev = 7;
-	char* bar = new char[sev]();
-	strncpy(bar, "foo", 3);
-	strncat(bar, "bar", 3);
-	bar[sev - 1] = '\0';
-	cout << bar << endl;
+	//testWackyStringInput();
     return 0;
 }
