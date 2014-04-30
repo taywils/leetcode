@@ -11,24 +11,33 @@ using namespace std;
 
 class Solution {
 public:
-	int atoi(const char *str) {
+	int atoi(const char *inputStr) {
 		int myInt = 0;
 		int myDigit = 0;
 		string intMaxStr = to_string(INT_MAX);
 		string intMinStr = to_string(INT_MIN);
+		string inputCppStr{ inputStr };
 
-		str = this->prepareStr(str);
+		string cppStr{ this->prepareStr(inputCppStr) };
 
-		for (int i = strlen(str) - 1; i >= 0; --i) {
-			if ('-' == str[i]) {
+		if (cppStr.length() == 0) return 0;
+		if (cppStr == intMaxStr) return INT_MAX;
+		if (cppStr == intMinStr) return INT_MIN;
+
+		bool overflow = false;
+
+		for (int i = cppStr.length() -1; i >= 0; --i) {
+			if ('-' == cppStr[i]) {
+				if (overflow) return INT_MIN;
 				myInt *= -1;
 			} else {
-				int num = this->charToInt(str[i]);
+				int num = this->charToInt(cppStr[i]);
 				myInt += (myDigit == 0) ? num : (int)(pow(10, (double)myDigit) * num);
+				if (myInt < 0) overflow = true;
 			}
 			++myDigit;
 		}
-
+		if (overflow) return INT_MAX;
 		return myInt;
 	}
 
@@ -60,13 +69,13 @@ private:
 		}
 	}
 
-	const char* prepareStr(const char* cStr) {
-		string cppStr(cStr);
+	string prepareStr(string cppStr) {
+		bool neg = false;
 		if(cppStr.length() == 0) {
 			return { "" };
 		}
-		int idx = 0;
 		// Remove leading whitespace
+		int idx = 0;
 		for(auto s : cppStr) {
 			if(' ' == s) {
 				++idx;
@@ -75,6 +84,25 @@ private:
 			}
 		}
 		cppStr = cppStr.substr(idx);
+		
+		// Check for negative sign
+		if ('-' == cppStr[0]) {
+			neg = true;
+			cppStr = cppStr.substr(1);
+		}
+
+		// Remove leading zeros
+		idx = 0;
+		for (auto s : cppStr) {
+			if ('0' == s) {
+				++idx;
+			}
+			else {
+				break;
+			}
+		}
+		cppStr = cppStr.substr(idx);
+
 		idx = 0;
 		// Remove trailing whitespace
 		for(auto s : cppStr) {
@@ -90,16 +118,20 @@ private:
 		// Truncate if char isalpha
 		idx = 0;
 		for(auto s : cppStr) {
-			if(isalpha(s) && s != '-') {
+			if (isalpha(s) || s == ' ' || s == '+' || s == '-') {
 				break;
 			} else {
 				++idx;
 			}
 		}
-		cppStr = cppStr.substr(0, idx);
-
-		return cppStr.c_str();
+		tempStr = cppStr.substr(0, idx);
+		if (neg) {
+			tempStr = '-' + tempStr;
+		}
+		return tempStr;
 	}
+
+	string tempStr;
 };
 
 void testValidInts() {
@@ -108,19 +140,30 @@ void testValidInts() {
 	std::uniform_int_distribution<int> dist{ INT_MIN, INT_MAX };
 
 	Solution solution;
-	const int trials = 0;
+	const int trials = 10000;
 
 	for (int i = 0; i < trials; ++i) {
 		int randNum = dist(mt);
 		string randNumStr = to_string(randNum);
-		const char* randNumCStr = randNumStr.c_str();
+		char* randNumCStr = new char[randNumStr.length() + 1];
+		strcpy(randNumCStr, randNumStr.c_str());
 		assert(atoi(randNumCStr) == solution.atoi(randNumCStr));
+		delete[] randNumCStr;
 	}
 
 	string largerThanMax{"2147483648"};
-	string smallerThanMin{"-2147483648"};
-	assert(INT_MAX == solution.atoi(largerThanMax.c_str()));
-	assert(INT_MIN == solution.atoi(smallerThanMin.c_str()));
+	char* cltm = new char[largerThanMax.length() + 1];
+	strcpy(cltm, largerThanMax.c_str());
+
+	string smallerThanMin{"-2147483649"};
+	char* cstm = new char[smallerThanMin.length() + 1];
+	strcpy(cstm, smallerThanMin.c_str());
+
+	assert(INT_MAX == solution.atoi(cltm));
+	assert(INT_MIN == solution.atoi(cstm));
+
+	delete[] cstm;
+	delete[] cltm;
 }
 
 void testWackyStringInput() {
@@ -136,6 +179,7 @@ void testWackyStringInput() {
 	const char* nonIntChar{ "  -0012a42" };
 	const char* startNonInt{ "x 123 " };
 	const char* a{ "a" };
+	const char* leadingSpaceAndZeroWithGap{ "  -0 451" };
 
 	assert(atoi(leadingWhiteSpace) == s.atoi(leadingWhiteSpace));
 	assert(atoi(trailingWhiteSpace) == s.atoi(trailingWhiteSpace));
@@ -147,10 +191,14 @@ void testWackyStringInput() {
 	assert(atoi(nonIntChar) == s.atoi(nonIntChar));
 	assert(atoi(startNonInt) == s.atoi(startNonInt));
 	assert(atoi(a) == s.atoi(a));
+	assert(atoi(leadingSpaceAndZeroWithGap) == s.atoi(leadingSpaceAndZeroWithGap));
 }
 
 int main(void) {
+	Solution s;
 	testValidInts();
-	//testWackyStringInput();
+	testWackyStringInput();
+	cout << s.atoi("+141") << endl;
+	cout << atoi("+141") << endl;
     return 0;
 }
