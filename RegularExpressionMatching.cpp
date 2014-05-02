@@ -1,13 +1,18 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <regex>
 
 using namespace std;
 
 class Solution {
 public:
 	bool isMatch(const char *s, const char *p) {
+		string str(s);
+		string queryStr(p);
+		regex query(queryStr);
 
+		return regex_match(s, query);
 	}
 };
 
@@ -23,6 +28,6 @@ void tests() {
 	assert(s.isMatch("aab", "c*a*b") == true);
 }
 
-int main() {
-	tests();
-}
+//int main() {
+//	tests();
+//}

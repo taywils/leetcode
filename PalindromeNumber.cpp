@@ -63,18 +63,18 @@ public:
 	}
 };
 
-void tests() {
-	Solution s;
-	assert(false == s.isPalindrome(-121));
-	assert(false == s.isPalindrome(4969831));
-
-	assert(true == s.isPalindrome(0));
-	assert(true == s.isPalindrome(121));
-	assert(true == s.isPalindrome(6886));
-	assert(true == s.isPalindrome(69696));
-	assert(true == s.isPalindrome(999999));
-	assert(true == s.isPalindrome(1010101));
-}
+//void tests() {
+//	Solution s;
+//	assert(false == s.isPalindrome(-121));
+//	assert(false == s.isPalindrome(4969831));
+//
+//	assert(true == s.isPalindrome(0));
+//	assert(true == s.isPalindrome(121));
+//	assert(true == s.isPalindrome(6886));
+//	assert(true == s.isPalindrome(69696));
+//	assert(true == s.isPalindrome(999999));
+//	assert(true == s.isPalindrome(1010101));
+//}
 
 //int main() {
 //	tests();
