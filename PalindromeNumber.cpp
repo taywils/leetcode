@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <cassert>
@@ -75,6 +76,6 @@ void tests() {
 	assert(true == s.isPalindrome(1010101));
 }
 
-int main() {
-	tests();
-}
+//int main() {
+//	tests();
+//}
