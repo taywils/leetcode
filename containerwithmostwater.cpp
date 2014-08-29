@@ -56,6 +56,7 @@ private:
 	}
 };
 
+/*
 int main(int argc, char** argv) {
 	Solution s = Solution();
 
@@ -80,3 +81,4 @@ int main(int argc, char** argv) {
 
 	return EXIT_SUCCESS;
 }
+*/
