@@ -17,45 +17,64 @@ A solution set is:
 
 using namespace std;
 
-// Correct but too slow.
 class Solution {
 public:
-	set< vector<int> > answer;
+	vector< vector<int> > answer;
 
 	vector< vector<int> > threeSum(vector<int> &num) {
+		if (num.empty() || num.size() < 3) {
+			return this->answer;
+		}
+
+		set<int> lol;
+		auto lolSize = num.size();
+		for (unsigned int i = 0; i < num.size(); ++i) lol.insert(num[i]);
+		num.assign(lol.begin(), lol.end());
+
+		if (num.size() < 3) {
+			if (num.at(num.size() - 1) == 0) {
+				vector<int> temp(3);
+				this->newAnswer(temp);
+			}
+			return this->answer;
+		}
+
 		sort(num.begin(), num.end());
-		for (unsigned int i = 0; i < num.size(); ++i) {
-			for (unsigned int j = i + 1; j < num.size(); ++j) {
-				unsigned int k = j + 1;
-				while (k < num.size()) {
-					if ((num.at(i) + num.at(j) + num.at(k)) == 0) {
-						vector<int> temp = { num.at(i), num.at(j), num.at(k) };
-						this->newAnswer(temp);
-					}
-					++k;
+
+		for (int i = 0; i < num.size() - 2; ++i) {
+			int j = i + 1;
+			int k = i + 2;
+			
+			while (j < num.size() - 1) {
+				if (k == num.size()) {
+					j++;
+					k = j + 1;
+					continue;
 				}
+				if ((num.at(i) + num.at(j) + num.at(k)) == 0) {
+					vector<int> temp = { num.at(i), num.at(j), num.at(k) };
+					this->newAnswer(temp);
+				}
+				++k;
 			}
 		}
-		return this->answerSetToVec();
+
+		return this->answer;
 	}
 
+private:
 	void newAnswer(vector<int> triple) {
-		this->answer.insert(triple);
-	}
-
-	vector< vector<int> > answerSetToVec() {
-		vector< vector<int> > vecAnswer;
-		for (auto elem : answer) {
-			vecAnswer.push_back(elem);
-		}
-
-		return vecAnswer;
+		auto notFound = (find(this->answer.begin(), this->answer.end(), triple) == this->answer.end());
+		if (notFound)
+			this->answer.push_back(triple);
 	}
 };
 
 int main() {
 	Solution s;
-	vector<int> t1 = { -1, 0, 1, 2, -1, -4 };
-	auto answer = s.threeSum(t1);
+	vector<int> t1 = { 0, 0, 0, 0 };
+	vector<int> t2 = { 3, 0, -2, -1, 1, 2 };
+	vector<int> t3 = { 1, 1, -2 };
+	auto answer = s.threeSum(t3);
 	return 0;
 }
